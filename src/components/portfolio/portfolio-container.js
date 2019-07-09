@@ -57,15 +57,13 @@ componentDidMount() {
         }
 
         return (
-            <div>
-                <h2>{this.state.pageTitle}</h2>
+                <div className="portfolio-items-wrapper">
+                    <button className ="btn" onClick={() => this.handleFilter('alt')}>alt</button>
+                    <button className ="btn" onClick={() => this.handleFilter('tab')}>tab</button>
+                    <button className ="btn" onClick={() => this.handleFilter('ctrl')}>ctrl</button>
 
-                <button onClick={() => this.handleFilter('alt')}>alt</button>
-                <button onClick={() => this.handleFilter('tab')}>tab</button>
-                <button onClick={() => this.handleFilter('ctrl')}>ctrl</button>
-
-                {this.portfolioItems()}
-            </div>
+                    {this.portfolioItems()}
+                </div>
         )
     }
 }
