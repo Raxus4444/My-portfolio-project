@@ -1,12 +1,14 @@
 import React, { Component } from "react";
+import axios from 'axios';
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            email: '',
-            password: ''
+            email: "",
+            password: "",
+            errorText: ""
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -15,12 +17,36 @@ export default class Login extends Component {
 
     handleChange(event) {
         this.setState({
-            [event.target.name]: event.target.value
-        })
+            [event.target.name]: event.target.value,
+            errorText: ""
+        });
     }
 
     handleSubmit(event) {
-        console.log('Handle submit', this.state.email, this.state.password);
+        axios.post("https://api.devcamp.space/sessions",
+        {
+            client: {
+                email: this.state.email,
+                password: this.state.password
+            }
+        },
+        { withCredentials: true }
+        ).then(response => {
+            if (response.data.status === 'created') {
+                this.props.handleSuccessfulAuth();
+            } else {
+                this.setState({
+                    errorText: 'Wrong email or password'
+                });
+                this.props.handleUnsuccessfulAuth();
+            }
+        })
+        .catch(error => {
+            this.setState({
+                errorText: "An error occured"
+            });
+        });
+
         event.preventDefault();
     }
 
@@ -28,6 +54,8 @@ export default class Login extends Component {
         return (
             <div>
                 <h1>LOGIN TO ACCESS YOUR DASHBOARD</h1>
+
+                <div>{this.state.errorText}</div>
 
                 <form onSubmit={this.handleSubmit}>
                     <input 
